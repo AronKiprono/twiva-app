@@ -2,6 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Payment;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
+
 class WalletService
 {
     /**
