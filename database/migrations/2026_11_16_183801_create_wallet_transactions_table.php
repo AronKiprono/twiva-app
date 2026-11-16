@@ -13,11 +13,17 @@ return new class extends Migration
     {
         Schema::create('wallet_transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('wallet_id')->constrained('wallets')->onDelete('cascade');
-            $table->unsignedBigInteger('payment_id')->constrained('payments')->onDelete('cascade');
-            $table->integer('amount_minor');
+            $table->foreignId('wallet_id')->constrained()->restrictOnDelete();
+            $table->foreignId('payment_id');
+            $table->bigInteger('amount_minor');
             $table->enum('type', ['credit', 'debit']);
             $table->timestamps();
+
+            $table->unique(['payment_id', 'type']);
+            $table->foreign(['payment_id', 'wallet_id'])
+                ->references(['id', 'wallet_id'])
+                ->on('payments')
+                ->restrictOnDelete();
         });
     }
 

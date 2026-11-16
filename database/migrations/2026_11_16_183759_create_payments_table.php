@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('wallet_id')->constrained('wallets')->onDelete('cascade');
+            $table->foreignId('wallet_id')->constrained()->restrictOnDelete();
             $table->string('reference')->unique();
-            $table->integer('amount_minor');
+            $table->bigInteger('amount_minor');
             $table->string('status');
             $table->timestamps();
+
+            // Supports the ledger's foreign key that also checks wallet ownership.
+            $table->unique(['id', 'wallet_id']);
         });
     }
 
